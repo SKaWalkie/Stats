@@ -61,26 +61,37 @@ Slip 2
 (1)
 import numpy as np
 import matplotlib.pyplot as plt
-\# parameters
+# parameters
 mu = 50
 sigma = 100
-\# generate 1000 samples
+# generate 1000 samples
 data = np.random.normal(mu, sigma, 1000)
-\# (i) sample mean and variance
-sample\_mean = np.mean(data)
-sample\_var = np.var(data)
-print("Sample Mean =", sample\_mean)
-print("Sample Variance =", sample\_var)
+# (i) sample mean and variance
+sample_mean = np.mean(data)
+sample_var = np.var(data)
+print("Sample Mean =", sample_mean)
+print("Sample Variance =", sample_var)
 
-\# (ii) theoretical values
+# (ii) theoretical values
 print("Theoretical Mean =", mu)
-print("Theoretical Variance =", sigma\*\*2)
-\# (iii) histogram with normal curve
+print("Theoretical Variance =", sigma**2)
+# (iii) histogram with normal curve
 count, bins, ignored = plt.hist(data, density=True)
 
 \# normal curve
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = [12,15,14,10,13,16,12,14,15,13]
+
+mu = np.mean(data)
+sigma = np.std(data)
+
+count, bins, ignored = plt.hist(data, bins=5, density=True)
+
 x = np.linspace(min(bins), max(bins), 1000)
-y = (1/(sigma\*np.sqrt(2\*np.pi))) \* np.exp(-(x-mu)\*\*2/(2\*sigma\*\*2))
+y = (1/(sigma*np.sqrt(2*np.pi))) * np.exp(-(x-mu)**2/(2*sigma**2))
+
 plt.plot(x, y)
 plt.title("Histogram with Normal Curve")
 plt.show()
