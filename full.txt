@@ -29,15 +29,19 @@ plt.show()
 (1)
 # Step 1: find K
 # equation: 0.1 + K + 0.2 + 2K + 0.3 + K = 1
+# Step 1: find K
+# equation: 0.1 + K + 0.2 + 2K + 0.3 + K = 1
 K = (1 - (0.1 + 0.2 + 0.3)) / 4
 print("K =", K)
+
 # Step 2: CDF
 F1 = 0.1
 F2 = F1 + K
 F3 = F2 + 0.2
-F4 = F3 + 2\*K
+F4 = F3 + 2*K
 F5 = F4 + 0.3
 F6 = F5 + K
+
 print("CDF:", F1, F2, F3, F4, F5, F6)
 
 
@@ -45,12 +49,12 @@ print("CDF:", F1, F2, F3, F4, F5, F6)
 import math
 lam = 4
 P0 = math.exp(-lam)
-P3 = math.exp(-lam) \* lam\*\*3 / math.factorial(3)
-P1 = math.exp(-lam) \* lam
-P\_atleast2 = 1 - (P0 + P1)
+P3 = math.exp(-lam) * lam**3 / math.factorial(3)
+P1 = math.exp(-lam) * lam
+P_atleast2 = 1 - (P0 + P1)
 print("P(0) =", P0)
 print("P(3) =", P3)
-print("P(X>=2) =", P\_atleast2)
+print("P(X>=2) =", P_atleast2)
 
 Slip 2
 ### Q.1
