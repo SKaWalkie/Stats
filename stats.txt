@@ -1,0 +1,608 @@
+SLIP-1
+
+import math, numpy as np, matplotlib.pyplot as plt
+
+# Q1: Uniform Distribution (100 to 200)
+print("Q1(i) P(X>150):", (200-150)/(200-100))
+print("Q1(ii) Mean:", (100+200)/2, "| Variance:", (200-100)**2/12)
+plt.plot([50, 100, 100, 200, 200, 250], [0, 0, 1/100, 1/100, 0, 0])
+plt.title("Q1: Uniform Distribution Curve"); plt.show()
+
+# Q2.1: Discrete Distribution (Sum of Probs = 1 => 4K + 0.6 = 1 => K = 0.1)
+K = 0.1
+print("\nQ2.1(i) K:", K)
+print("Q2.1(ii) CDF:", np.cumsum([0.1, K, 0.2, 2*K, 0.3, K]).round(1).tolist())
+
+# Q2.2: Poisson Distribution (lambda = 4)
+P = lambda x: math.exp(-4) * 4**x / math.factorial(x)
+print("\nQ2.2(i) P(X=0):", round(P(0), 4))
+print("Q2.2(ii) P(X=3):", round(P(3), 4))
+print("Q2.2(iii) P(X>=2):", round(1 - P(0) - P(1), 4))
+
+SLIP-2
+
+import numpy as np, matplotlib.pyplot as plt, math
+
+# Q1: Normal Distribution N(50, 100) => mean=50, std=10
+data = np.random.normal(50, 10, 1000)
+print(f"Q1(i) & (ii) Sample Mean: {data.mean():.2f}, Sample Var: {data.var():.2f} | Theoretical: 50, 100")
+
+# Q1(iii): Plot histogram with normal curve
+plt.hist(data, bins=30, density=True, alpha=0.6, color='skyblue')
+x = np.linspace(15, 85, 100)
+plt.plot(x, (1/(10*np.sqrt(2*np.pi))) * np.exp(-0.5*((x-50)/10)**2), 'r-', lw=2)
+plt.title("Q1: Normal Distribution"); plt.show()
+
+# Q2.1: Chebyshev's Theorem (std = 1.2, distance = 4 -> k = 4/1.2)
+k = 4 / 1.2
+print(f"\nQ2.1 Probability (Chebyshev) >=\t{1 - (1/k**2):.4f}")
+
+# Q2.2: Binomial Distribution (n=10, p=0.4, P(X<=3))
+p_binom = sum(math.comb(10, i) * (0.4**i) * (0.6**(10-i)) for i in range(4))
+print(f"Q2.2 Probability P(X<=3) =\t{p_binom:.4f}")
+
+SLIP-3
+
+import math, numpy as np, matplotlib.pyplot as plt
+
+# Q1: Sampling Distribution (mu=45, sigma=12, n=36)
+se = 12 / math.sqrt(36)
+z = (48 - 45) / se
+print(f"Q1(i) Standard Error: {se}")
+print(f"Q1(ii) P(X > 48): {0.5 * (1 - math.erf(z / math.sqrt(2))):.4f}")
+
+# Q1(iii): Visualize distribution
+x = np.linspace(35, 55, 100)
+plt.plot(x, (1/(se*np.sqrt(2*np.pi))) * np.exp(-0.5*((x-45)/se)**2), lw=2)
+plt.axvline(48, color='r', linestyle='--', label='Sample Mean = 48')
+plt.title("Q1: Sampling Distribution"); plt.legend(); plt.show()
+
+# Q2.1: Binomial Distribution (n=15, p=0.1, k=2)
+p_binom = math.comb(15, 2) * (0.1**2) * (0.9**13)
+print(f"\nQ2.1 Probability P(X=2):\t{p_binom:.4f}")
+
+# Q2.2: Hypergeometric Distribution (N=15 total, K=2 faulty, n=5 sample)
+C = math.comb
+print(f"\nQ2.2(i) P(1 faulty):\t\t{(C(2, 1) * C(13, 4)) / C(15, 5):.4f}")
+print(f"Q2.2(ii) P(Both faulty):\t{(C(2, 2) * C(13, 3)) / C(15, 5):.4f}")
+
+SLIP-4
+
+import math
+
+# Q1: 95% CI for Variance & Std Dev (n=12, s2=0.0013)
+# df = 11. Critical Chi-square values for 95%: 21.92 (upper) and 3.816 (lower)
+v_ci = (11 * 0.0013 / 21.92, 11 * 0.0013 / 3.816)
+print(f"Q1(i) Variance 95% CI: {v_ci[0]:.6f} to {v_ci[1]:.6f}")
+print(f"Q1(ii) Std Dev 95% CI: {math.sqrt(v_ci[0]):.4f} to {math.sqrt(v_ci[1]):.4f}\n")
+
+# Q2.1: Poisson (lambda=3). For Binomial exact comparison, we assume n=60s, p=0.05
+print(f"Q2.1(i) Exactly 2 calls: {math.exp(-3) * 3**2 / 2:.4f}")
+print(f"Q2.1(ii) At least 1 call: {1 - math.exp(-3):.4f}")
+print(f"Q2.1(iii) Binomial (n=60, p=0.05): {1 - (0.95**60):.4f} (Matches Poisson)\n")
+
+# Q2.2: Bayes Theorem (P(D)=0.02, Sens=0.93, Spec=0.94)
+pd, sens, spec = 0.02, 0.93, 0.94
+p_pos = sens * pd + (1 - spec) * (1 - pd)
+p_neg = spec * (1 - pd) + (1 - sens) * pd
+
+print(f"Q2.2 P(Disease | Positive): {(sens * pd) / p_pos:.4f}")
+print(f"Q2.2 P(No Disease | Negative): {(spec * (1 - pd)) / p_neg:.4f}")
+
+SLIP-5
+
+import math
+
+# Q1: CLT & Confidence Interval (n=100, mean=185, s=30)
+print("Q1(i): We can use the Normal Distribution because of the Central Limit Theorem (sample size n=100 >= 30).")
+m = 2.576 * (30 / math.sqrt(100)) # 2.576 is the z-score for 99% CI
+print(f"Q1(ii): 99% CI = [{185 - m:.2f}, {185 + m:.2f}]\n")
+
+# Q2.1: Discrete Probability Distribution
+weights = (1, 3, 5, 7, 9, 1) # Coefficients of K
+K = 1 / sum(weights)
+print(f"Q2.1(i): K = 1/26 = {K:.4f}")
+print(f"Q2.1(ii): CDF F(x) = {[round(sum(weights[:i+1]) * K, 4) for i in range(6)]}\n")
+
+# Q2.2: Hypergeometric Probabilities (Total=10, Defective=3, Selected=4)
+C = math.comb
+print(f"Q2.2(i) P(all 4 will fire): {C(7, 4) / C(10, 4):.4f}")
+# 'At most 2 will not fire' is the complement of 'Exactly 3 will not fire'
+print(f"Q2.2(ii) P(at most 2 won't fire): {1 - (C(3, 3) * C(7, 1) / C(10, 4)):.4f}")
+
+SLIP-6
+
+import math
+
+# Q1: Binomial Distribution (n=400, p=0.25)
+print("Q1 Condition: np = 100 >= 5 and nq = 300 >= 5 (Approximation Valid)")
+print("Q1(i) Theoretical Mean: 100 | Variance: 75")
+# (ii) Using continuity correction (X >= 119.5) for normal approximation
+z = (119.5 - 100) / math.sqrt(75)
+print(f"Q1(ii) Normal Approx P(X>=120): {0.5 * (1 - math.erf(z / math.sqrt(2))):.4f}")
+print(f"Q1(iii) Exact Binomial P(X>=120): {sum(math.comb(400, i)*(0.25**i)*(0.75**(400-i)) for i in range(120, 401)):.4f}\n")
+
+# Q2.1: Chebyshev's Theorem (std=1.2, distance=4 => k = 4/1.2)
+# Formula: P(|X - mu| < k*std) >= 1 - (1/k^2)
+print(f"Q2.1 Chebyshev Probability >= {1 - (1.2/4)**2:.4f}\n")
+
+# Q2.2: Hypergeometric Distribution (Population N=52, Successes K=4, Sample n=5)
+# *Note: Interpreted as mean/variance of the distribution + prob of exactly 2 aces.
+print(f"Q2.2 Mean of Aces Drawn: {5 * (4/52):.4f}")
+print(f"Q2.2 Variance of Aces Drawn: {5 * (4/52) * (48/52) * (47/51):.4f}")
+print(f"Q2.2 Probability of EXACTLY 2 Aces: {(math.comb(4, 2) * math.comb(48, 3)) / math.comb(52, 5):.4f}")
+
+SLIP-7
+
+import math
+
+# Q1: Confidence Intervals (n=10, df=9)
+w = [7.72, 9.58, 12.38, 7.77, 11.27, 8.80, 11.10, 7.80, 10.17, 6.00]
+mean = sum(w) / 10
+s2 = sum((x - mean)**2 for x in w) / 9
+
+# (i) 95% CI for Variance (Chi-Square critical values for df=9: 19.023 and 2.700)
+print(f"Q1(i) 95% CI for Variance: [{9 * s2 / 19.023:.4f}, {9 * s2 / 2.700:.4f}]")
+
+# (ii) The question is incomplete, but usually implies finding the 95% CI for the mean 
+# (T-distribution critical value for df=9 is 2.262)
+margin = 2.262 * math.sqrt(s2 / 10)
+print(f"Q1(ii) 95% CI for Mean: [{mean - margin:.4f}, {mean + margin:.4f}]\n")
+
+# Q2.1: Poisson Distribution (lambda = 1.2)
+P = lambda x: math.exp(-1.2) * 1.2**x / math.factorial(x)
+print(f"Q2.1(i) P(X=1): {P(1):.4f}")
+print(f"Q2.1(ii) P(X<=2): {sum(P(i) for i in range(3)):.4f}")
+print(f"Q2.1(iii) P(X>3): {1 - sum(P(i) for i in range(4)):.4f}\n")
+
+# Q2.2: Bayes Theorem
+# P(A) = 0.70, P(Defective|A) = 0.02 | P(B) = 0.30, P(Defective|B) = 0.05
+p_a_given_defective = (0.70 * 0.02) / ((0.70 * 0.02) + (0.30 * 0.05))
+print(f"Q2.2 P(Factory A | Defective): {p_a_given_defective:.4f}")
+
+SLIP-8
+
+import math, matplotlib.pyplot as plt
+
+# Q1: Uniform Distribution U(100, 200)
+print(f"Q1(i) P(X>150): {(200-150)/(200-100)}")
+print(f"Q1(ii) Mean: {(100+200)/2} | Variance: {(200-100)**2/12:.2f}")
+
+# Q1(iii): Plot distribution curve
+plt.plot([50, 100, 100, 200, 200, 250], [0, 0, 1/100, 1/100, 0, 0], lw=2)
+plt.title("Q1: Uniform Distribution U(100, 200)"); plt.show()
+
+# Q2.1: Poisson Approximation (n=800, p=0.001 => lambda = np = 0.8)
+L = 0.8 
+P = lambda x: math.exp(-L) * L**x / math.factorial(x)
+print(f"\nQ2.1(i) P(X=0): {P(0):.4f}")
+print(f"Q2.1(ii) P(X=3): {P(3):.4f}")
+
+# Q2.2: Chebyshev's Theorem (mean=151, var=196 => std=14)
+# Distance from mean to 123 or 179 is 28. Therefore, k = 28 / 14 = 2.
+k = (151 - 123) / math.sqrt(196)
+print(f"\nQ2.2 Chebyshev bound: {(1 - 1/k**2) * 100}%")
+
+SLIP - 9
+
+import math
+
+# Q1: 95% CI for Variance (n=10, df=9)
+# Chi-Square critical values for df=9: 19.023 (upper) and 2.700 (lower)
+d = [12, 15, 14, 10, 13, 11, 16, 14, 13, 12]
+s2_num = sum((x - sum(d)/10)**2 for x in d) # Sum of squared differences
+print(f"Q1 95% CI for Variance: [{s2_num/19.023:.4f}, {s2_num/2.700:.4f}]\n")
+
+# Q2.1: Binomial & Normal Approximation (n=400, p=0.25)
+print("Q2.1 Condition Check: np=100 >= 5 and nq=300 >= 5 (Approximation Valid)")
+print("Q2.1(i) Theoretical Mean: 100 | Variance: 75")
+
+# (ii) Continuity correction (X >= 119.5) for normal approx
+z = (119.5 - 100) / math.sqrt(75) 
+print(f"Q2.1(ii) Normal Approx P(X>=120): {0.5 * (1 - math.erf(z / math.sqrt(2))):.4f}")
+
+# (iii) Exact probability calculation
+exact_p = sum(math.comb(400, i) * (0.25**i) * (0.75**(400-i)) for i in range(120, 401))
+print(f"Q2.1(iii) Exact Binomial P(X>=120): {exact_p:.4f}\n")
+
+# Q2.2: Bayes Theorem
+# P(Spam)=0.4, P(Not)=0.6 | P(Free|Spam)=0.7, P(Free|Not)=0.05
+p_spam_given_free = (0.4 * 0.7) / ((0.4 * 0.7) + (0.6 * 0.05))
+print(f"Q2.2 P(Spam | 'Free' appears): {p_spam_given_free:.4f}")
+
+SLIP-10
+
+import math
+
+# Q1: 95% CI for Variance (n=9, df=8)
+# Chi-Square critical values for df=8 (alpha=0.05) are 17.535 (upper) and 2.180 (lower)
+d = [8, 10, 7, 9, 11, 6, 10, 9, 8]
+ss = sum((x - sum(d)/9)**2 for x in d) # Sum of squared differences
+print(f"Q1 95% CI for Variance: [{ss/17.535:.4f}, {ss/2.180:.4f}]\n")
+
+# Q2.1: Binomial Distribution (n=600, p=0.04)
+n, p = 600, 0.04
+print(f"Q2.1 Mean: {n * p:.2f} | Variance: {n * p * (1 - p):.2f}\n")
+
+# Q2.2: Hypergeometric Distribution (Population N=52, Aces K=4, Sample n=5)
+# *Interpreted as mean/variance of the drawn aces + probability of exactly 2
+print(f"Q2.2 Mean of Aces Drawn: {5 * (4/52):.4f}")
+print(f"Q2.2 Variance of Aces Drawn: {5 * (4/52) * (48/52) * (47/51):.4f}")
+print(f"Q2.2 P(Exactly 2 Aces): {(math.comb(4, 2) * math.comb(48, 3)) / math.comb(52, 5):.4f}")
+
+SLIP-11
+
+import math
+
+# Q1: 95% Confidence Interval (z=1.96, mean=2.5, sigma=0.05, n=40)
+margin = 1.96 * (0.05 / math.sqrt(40))
+print(f"Q1 95% CI for Mean: [{2.5 - margin:.4f}, {2.5 + margin:.4f}]\n")
+
+# Q2.1: Hypergeometric Prob (Population N=5000, Blemished K=1000, Sample n=10, k=3)
+# Note: Binomial approximation (n=10, p=0.2) yields almost identical results.
+C = math.comb
+print(f"Q2.1 P(Exactly 3 blemished): {(C(1000, 3) * C(4000, 7)) / C(5000, 10):.4f}\n")
+
+# Q2.2: Binomial Distribution Mean and Std Dev (n=800, p=0.65)
+mean = 800 * 0.65
+std_dev = math.sqrt(mean * (1 - 0.65))
+print(f"Q2.2 Mean: {mean:.2f} | Standard Deviation: {std_dev:.4f}")
+
+SLIP-12
+
+import math, numpy as np, matplotlib.pyplot as plt
+
+# Q1: Normal Approximation (n=300, p=0.5 => mu=150, var=75)
+print("Q1(i) Condition check: np=150 >= 5 and nq=150 >= 5. Approximation is valid.")
+cdf = lambda x: 0.5 * (1 + math.erf((x - 150) / math.sqrt(150) / math.sqrt(2))) # using var=75, so sd=sqrt(75) wait, denominator is sqrt(2*var) = sqrt(150)
+print(f"Q1(ii) P(140<=X<=170) w/ continuity correction: {cdf(170.5) - cdf(139.5):.4f}\n")
+
+# Q1(iii): Plot and shade region
+x = np.linspace(120, 180, 500)
+y = (1/np.sqrt(150*np.pi)) * np.exp(-0.5*((x-150)**2)/75)
+plt.plot(x, y); plt.fill_between(x, y, where=(x>=139.5)&(x<=170.5), alpha=0.5)
+plt.title("Q1: Normal Curve (Shaded)"); plt.show()
+
+# Q2.1: Discrete Prob Distribution (Sum of P(x) = 1 => 6K + 0.5 = 1 => K = 1/12)
+K = 1 / 12
+print(f"Q2.1(i) K = {K:.4f}")
+print(f"Q2.1(ii) CDF F(x) = {np.cumsum([2*K, K, 0.2, 2*K, 0.3, K]).round(4).tolist()}\n")
+
+# Q2.2: Bayes Theorem (P(Spam)=0.4, P(Not)=0.6 | P(Free|Spam)=0.7, P(Free|Not)=0.05)
+p_spam_given_free = (0.4 * 0.7) / ((0.4 * 0.7) + (0.6 * 0.05))
+print(f"Q2.2 P(Spam | 'Free' appears): {p_spam_given_free:.4f}")
+
+SLIP-13
+
+import math
+
+# Q1: 95% CI for Variance (n=10, df=9)
+# Chi-Square critical values for alpha=0.05, df=9: 19.023 (upper) and 2.700 (lower)
+w = [7.72, 9.58, 12.38, 7.77, 11.27, 8.80, 11.10, 7.80, 10.17, 6.00]
+ss = sum((x - sum(w)/10)**2 for x in w) # Sum of squared differences
+print(f"Q1 95% CI for Variance: [{ss/19.023:.4f}, {ss/2.700:.4f}]\n")
+
+# Q2.1: Hypergeometric / Combinatorics (Total=9. Draw=5)
+# Need exactly 2 Blue AND >= 1 Red. 
+# Ways = (Total ways to get 2 Blue) - (Ways to get 2 Blue and 0 Red [which means all Green])
+C = math.comb
+valid_ways = (C(2, 2) * C(7, 3)) - (C(2, 2) * C(4, 0) * C(3, 3))
+print(f"Q2.1 P(Both Blue & >=1 Red): {valid_ways / C(9, 5):.4f}\n")
+
+# Q2.2: Poisson Approximation (n=600, p=0.002 => lambda = 1.2)
+L = 1.2 
+P = lambda x: math.exp(-L) * (L**x) / math.factorial(x)
+print(f"Q2.2(i) P(Exactly 2 accidents): {P(2):.4f}")
+print(f"Q2.2(ii) P(At most 1 accident): {P(0) + P(1):.4f}")
+
+SLIP-14
+
+import math, statistics as st, matplotlib.pyplot as plt
+
+# Q1: CI for unknown mean (n=12, df=11 => t_critical = 2.201)
+d = [120, 150, 135, 160, 145, 130, 140, 155, 150, 142, 138, 148]
+m, s = st.mean(d), st.stdev(d)
+margin = 2.201 * (s / math.sqrt(len(d)))
+print(f"Q1(i) Point Estimate (Mean): {m:.2f}")
+print(f"Q1(ii) 95% CI: [{m - margin:.2f}, {m + margin:.2f}]")
+
+# Q1(iii): Plot Data & CI
+plt.plot(d, 'bo', label='Sample Data')
+plt.axhline(m, color='g', label='Mean')
+plt.axhline(m - margin, color='r', linestyle='--', label='95% CI Bounds')
+plt.axhline(m + margin, color='r', linestyle='--')
+plt.title("Q1: Cold Start Latency"); plt.legend(); plt.show()
+
+# Q2.1: Chebyshev's Theorem (n=979, p=1/22)
+mu = 979 * (1/22)
+sd = math.sqrt(mu * (21/22))
+k = abs(25 - mu) / sd # Distance from mean to 25 (or 64) is 19.5
+print(f"\nQ2.1 Prob(<=25 or >=64) <= {1 / k**2:.4f}")
+
+# Q2.2: Expected Winnings & Variance 
+# Outcomes: 2H (prob 0.25, win 5), 1H (prob 0.5, win 2), 0H (prob 0.25, win 1)
+E_X = 5*0.25 + 2*0.5 + 1*0.25
+Var_X = (25*0.25 + 4*0.5 + 1*0.25) - E_X**2
+print(f"\nQ2.2 Expected Winning: Rs. {E_X:.2f} | Variance: {Var_X:.2f}")
+
+SLIP-15
+
+import math, numpy as np, matplotlib.pyplot as plt
+
+# Q1: Uniform Distribution U(5, 15)
+a, b = 5, 15
+print(f"Q1(i)&(ii) Theoretical Mean: {(a+b)/2} | Variance: {(b-a)**2/12:.4f}")
+
+data = np.random.uniform(a, b, 10000)
+print(f"Q1(iii) Sample Mean: {data.mean():.4f} | Sample Variance: {data.var():.4f}")
+
+# Q1(iv): Plotting
+plt.hist(data, bins=50, density=True, alpha=0.6, color='skyblue', label='Sample Data')
+plt.plot([0, a, a, b, b, 20], [0, 0, 1/(b-a), 1/(b-a), 0, 0], 'r-', lw=2, label='Theoretical PDF')
+plt.title("Q1: Uniform Distribution U(5, 15)"); plt.legend(); plt.show()
+
+# Q2.1: Chebyshev's Theorem (mean=151, var=169 => std=13)
+# Distance from 151 to 123 (or 179) is 28. Therefore, k = 28 / 13.
+k = (151 - 123) / math.sqrt(169)
+print(f"\nQ2.1 Chebyshev percentage >= {(1 - 1/k**2)*100:.2f}%")
+
+# Q2.2: Poisson Distribution (lambda=4, P(2 <= X <= 5))
+p_poisson = sum(math.exp(-4) * 4**x / math.factorial(x) for x in range(2, 6))
+print(f"Q2.2 P(2 <= X <= 5): {p_poisson:.4f}")
+
+SLIP-16
+
+import math, numpy as np, matplotlib.pyplot as plt
+
+# Q1: Sampling Distribution (mu=45, sigma=12, n=36)
+se = 12 / math.sqrt(36)
+z = (48 - 45) / se
+print(f"Q1(i) Standard Error: {se}")
+print(f"Q1(ii) P(X > 48): {0.5 * (1 - math.erf(z / math.sqrt(2))):.4f}")
+
+# Q1(iii): Visualize sampling distribution
+x = np.linspace(35, 55, 100)
+plt.plot(x, (1/(se*np.sqrt(2*np.pi))) * np.exp(-0.5*((x-45)/se)**2), lw=2)
+plt.axvline(48, color='r', linestyle='--', label='Sample Mean = 48')
+plt.title("Q1: Sampling Distribution"); plt.legend(); plt.show()
+
+# Q2.1: Binomial Distribution (n=900, p=0.06)
+n, p = 900, 0.06
+print(f"\nQ2.1 Mean: {n * p:.2f} | Variance: {n * p * (1 - p):.2f}")
+
+# Q2.2: Hypergeometric Distribution (Population N=52, Aces K=4, Sample n=5)
+# *Note: Interpreted as finding the mean/variance of the drawn aces + probability of exactly 2.
+print(f"\nQ2.2 Mean of Aces Drawn: {5 * (4/52):.4f}")
+print(f"Q2.2 Variance of Aces Drawn: {5 * (4/52) * (48/52) * (47/51):.4f}")
+print(f"Q2.2 P(Exactly 2 Aces): {(math.comb(4, 2) * math.comb(48, 3)) / math.comb(52, 5):.4f}")
+
+SLIP-17
+
+import math
+
+# Q1: Normal Approximation & Binomial (n=160, p=0.3, q=0.7)
+n, p, q = 160, 0.3, 0.7
+mu, var = n * p, n * p * q
+print(f"Q1(i) Check: np={mu} >= 5 and nq={n*q} >= 5. Normal approximation is valid.")
+
+# (ii) Normal approx for P(X <= 50) using continuity correction (X <= 50.5)
+z = (50.5 - mu) / math.sqrt(var)
+print(f"Q1(ii) Normal Approx P(X<=50): {0.5 * (1 + math.erf(z / math.sqrt(2))):.4f}")
+
+# (iii) Exact Binomial probability for P(X <= 50)
+exact_p = sum(math.comb(n, i) * (p**i) * (q**(n-i)) for i in range(51))
+print(f"Q1(iii) Exact Binomial P(X<=50): {exact_p:.4f}\n")
+
+
+# Q2.1: Binomial Distribution Mean and Variance (n=600, p=0.04)
+n2, p2 = 600, 0.04
+print(f"Q2.1 Mean: {n2 * p2:.2f} | Variance: {n2 * p2 * (1 - p2):.2f}\n")
+
+
+# Q2.2: Conditional Probability P(King | Face Card)
+# A standard deck has 12 face cards (4 Jacks, 4 Queens, 4 Kings). 
+print(f"Q2.2 P(King | Face Card): 4/12 = {4/12:.4f}")
+
+SLIP-18
+
+import math
+
+# Q1: 95% CI for Variance & Std Dev (n=12, s^2=0.0013)
+# df = 11. Chi-square critical values for 95% CI: 21.92 and 3.816
+v_low, v_high = (11 * 0.0013 / 21.92), (11 * 0.0013 / 3.816)
+print(f"Q1(i) Variance 95% CI: [{v_low:.6f}, {v_high:.6f}]")
+print(f"Q1(ii) Std Dev 95% CI: [{math.sqrt(v_low):.4f}, {math.sqrt(v_high):.4f}]\n")
+
+# Q2.1: Binomial Probability (n=15, p=0.95, k=15)
+prob_all = 0.95**15
+print(f"Q2.1 Prob(All 15 do not spoil): {prob_all:.4f}\n")
+
+# Q2.2: Chebyshev's Theorem (std=1.2, distance=4)
+# Formula: P(|X - mu| < k*sigma) >= 1 - (1/k^2) where k = distance / sigma
+k = 4 / 1.2
+cheb_prob = 1 - (1 / k**2)
+print(f"Q2.2 Chebyshev Probability (within 4 hours) >= {cheb_prob:.4f}")
+
+SLIP-19
+
+import math, statistics as st, matplotlib.pyplot as plt
+
+# Q1: Confidence Interval (n=12, df=11, t_crit for 95% = 2.201)
+data = [120, 150, 135, 160, 145, 130, 140, 155, 150, 142, 138, 148]
+mean, sd = st.mean(data), st.stdev(data)
+me = 2.201 * (sd / math.sqrt(len(data)))
+print(f"Q1: Point Estimate: {mean:.2f} | 95% CI: [{mean-me:.2f}, {mean+me:.2f}]")
+plt.plot(data, 'bo'); plt.axhline(mean, color='g'); plt.axhspan(mean-me, mean+me, alpha=0.2, color='r')
+plt.title("Cloud Function Latency & CI Bounds"); plt.show()
+
+# Q2.1: Discrete Probability (Sum P(X)=1 => 4K + 0.6 = 1 => K = 0.1)
+K = 0.1
+print(f"\nQ2.1: K = {K}")
+probs = [0.1, K, 0.2, 2*K, 0.3, K]
+cdf = [round(sum(probs[:i+1]), 2) for i in range(len(probs))]
+print(f"Q2.1: CDF F(x) = {cdf}")
+
+# Q2.2: Poisson Distribution (lambda = 3)
+p_pois = lambda x: (math.exp(-3) * 3**x) / math.factorial(x)
+print(f"\nQ2.2: P(Exactly 2 calls) = {p_pois(2):.4f}")
+print(f"Q2.2: P(At least 1 call) = {1 - p_pois(0):.4f}")
+
+SLIP-20
+
+import math
+
+# Q1: Normal Distribution (mean=70, std=8)
+def cdf(x): return 0.5 * (1 + math.erf((x - 70) / (8 * math.sqrt(2))))
+
+print(f"Q1(i) % score > 85: {(1 - cdf(85)) * 100:.2f}%")
+print(f"Q1(ii) P(60 < X < 75): {cdf(75) - cdf(60):.4f}")
+print(f"Q1(iii) Z-scores for 60, 75, 85: {[(v - 70) / 8 for v in [60, 75, 85]]}\n")
+
+# Q2.1: Hypergeometric Distribution (N=15, K=2, n=5)
+comb = math.comb
+def hyper(k): return (comb(2, k) * comb(13, 5 - k)) / comb(15, 5)
+
+print(f"Q2.1(i) P(1 faulty): {hyper(1):.4f}")
+print(f"Q2.1(ii) P(both faulty): {hyper(2):.4f}\n")
+
+# Q2.2: Poisson Distribution (lambda=3)
+def poisson(k): return (math.exp(-3) * 3**k) / math.factorial(k)
+
+print(f"Q2.2(i) P(0 customers): {poisson(0):.4f}")
+print(f"Q2.2(ii) P(exactly 2): {poisson(2):.4f}")
+print(f"Q2.2(iii) P(at least 1): {1 - poisson(0):.4f}")
+
+SLIP-21
+
+import math
+
+# Q1: 95% Confidence Interval for Variance (n=10, df=9)
+# Chi-Square critical values for df=9 at 0.05: 19.023 (upper) and 2.700 (lower)
+data = [7.72, 9.58, 12.38, 7.77, 11.27, 8.80, 11.10, 7.80, 10.17, 6.00]
+mean = sum(data) / 10
+ss = sum((x - mean)**2 for x in data)
+print(f"Q1: 95% CI for Variance: [{ss/19.023:.4f}, {ss/2.700:.4f}]\n")
+
+# Q2.1: Binomial Distribution (n=800, p=0.65)
+n, p = 800, 0.65
+mu = n * p
+std = math.sqrt(n * p * (1 - p))
+print(f"Q2.1: Mean: {mu:.2f} | Std Dev: {std:.4f}\n")
+
+# Q2.2: Hypergeometric Distribution (N=15, K=2, n=5)
+comb = math.comb
+def hyper(k): return (comb(2, k) * comb(13, 5-k)) / comb(15, 5)
+
+print(f"Q2.2(i) P(1 faulty): {hyper(1):.4f}")
+print(f"Q2.2(ii) P(both faulty): {hyper(2):.4f}")
+
+SLIP-22
+
+import math, statistics as st, matplotlib.pyplot as plt
+
+# Q1: Cold Start Latency (n=12, df=11, t_crit for 95% = 2.201)
+data = [120, 150, 135, 160, 145, 130, 140, 155, 150, 142, 138, 148]
+mean, sd = st.mean(data), st.stdev(data)
+me = 2.201 * (sd / math.sqrt(len(data)))
+
+print(f"Q1(i) Point Estimate: {mean:.2f}")
+print(f"Q1(ii) 95% CI: [{mean-me:.2f}, {mean+me:.2f}]")
+
+# Q1(iii) Plotting
+plt.scatter(range(len(data)), data, label='Sample Data')
+plt.axhline(mean, color='g', label='Mean')
+plt.axhspan(mean-me, mean+me, alpha=0.2, color='r', label='95% CI')
+plt.title("Q1: Latency & CI Bounds"); plt.legend(); plt.show()
+
+# Q2.1: Bayes Theorem
+# P(B|D) = (P(D|B) * P(B)) / P(D)
+p_machines = [0.3, 0.5, 0.2]  # A, B, C
+p_defects = [0.02, 0.03, 0.05]
+p_total_defect = sum(m * d for m, d in zip(p_machines, p_defects))
+p_b_given_defect = (p_machines[1] * p_defects[1]) / p_total_defect
+print(f"\nQ2.1 P(Machine B | Defective): {p_b_given_defect:.4f}")
+
+# Q2.2: Binomial Dist (n=3 flips, p=0.5 tails)
+n, p = 3, 0.5
+print(f"Q2.2 Mean: {n*p:.1f} | Variance: {n*p*(1-p):.2f}")
+
+SLIP-23
+
+import math, numpy as np, matplotlib.pyplot as plt
+
+# Q1: Uniform Distribution U(5, 15)
+a, b = 5, 15
+print(f"Q1(i) Theoretical Mean: {(a+b)/2} | Variance: {(b-a)**2/12:.2f}")
+
+data = np.random.uniform(a, b, 10000)
+print(f"Q1(ii)&(iii) Sample Mean: {data.mean():.4f} | Variance: {data.var():.4f}")
+
+# Q1(iv) Plot curve
+plt.hist(data, bins=50, density=True, alpha=0.6, color='skyblue')
+plt.plot([a, b], [1/(b-a), 1/(b-a)], 'r-', lw=2)
+plt.title("Q1: Uniform Distribution U(5, 15)"); plt.show()
+
+# Q2.1: Binomial Distribution (n=800, p=0.65)
+n, p = 800, 0.65
+print(f"\nQ2.1 Mean: {n*p:.1f} | Std Dev: {math.sqrt(n*p*(1-p)):.4f}")
+
+# Q2.2: Poisson Distribution (lambda = 3)
+p_pois = lambda k: (math.exp(-3) * 3**k) / math.factorial(k)
+print(f"\nQ2.2(1) P(Exactly 2): {p_pois(2):.4f}")
+print(f"Q2.2(2) P(At least 1): {1 - p_pois(0):.4f}")
+
+SLIP-24
+
+import math
+
+# Q1: 95% CI for Variance & Std Dev (n=12, s^2=0.0013)
+# df = 11. Chi-square critical values for 95% CI: 21.92 and 3.816
+v_low, v_high = (11 * 0.0013 / 21.92), (11 * 0.0013 / 3.816)
+print(f"Q1(i) Variance 95% CI: [{v_low:.6f}, {v_high:.6f}]")
+print(f"Q1(ii) Std Dev 95% CI: [{math.sqrt(v_low):.4f}, {math.sqrt(v_high):.4f}]\n")
+
+# Q2.1: Discrete Probability (Sum P(X)=1 => 4K + 0.6 = 1 => K = 0.1)
+K = 0.1
+probs = [0.1, K, 0.2, 2*K, 0.3, K]
+print(f"Q2.1(i) K: {K}")
+print(f"Q2.1(ii) CDF F(x): {[round(sum(probs[:i+1]), 2) for i in range(len(probs))]}\n")
+
+# Q2.2: Bayes Theorem (Disease=2%, Sensitivity=93%, Specificity=94%)
+pd, sens, spec = 0.02, 0.93, 0.94
+p_pos = (sens * pd) + ((1 - spec) * (1 - pd))
+p_neg = (spec * (1 - pd)) + ((1 - sens) * pd)
+
+print(f"Q2.2 P(D|Positive): {(sens * pd) / p_pos:.4f}")
+print(f"Q2.2 P(notD|Negative): {(spec * (1 - pd)) / p_neg:.4f}")
+
+SLIP-25
+
+import math, numpy as np, matplotlib.pyplot as plt
+
+# Q1: Sampling Distribution (mu=60, sigma=18, n=40)
+se = 18 / math.sqrt(40)
+# Part (ii) asks for prob for n=36, x > 48 (following the text's specific change in n)
+se36 = 18 / math.sqrt(36)
+z = (48 - 60) / se36
+p_greater = 0.5 * (1 - math.erf(z / math.sqrt(2)))
+
+print(f"Q1(i) Standard Error (n=40): {se:.2f}")
+print(f"Q1(ii) P(X > 48 for n=36): {p_greater:.4f}")
+
+# Q1(iii) Visualization
+x = np.linspace(60 - 4*se, 60 + 4*se, 100)
+y = (1 / (se * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - 60) / se)**2)
+plt.plot(x, y)
+plt.axvline(48, color='r', linestyle='--', label='Sample Mean 48')
+plt.title("Sampling Distribution of Mean"); plt.legend(); plt.show()
+
+# Q2.1: Poisson Approximation (n=600, p=0.002 => lambda = 1.2)
+L = 1.2
+pois = lambda k: (math.exp(-L) * L**k) / math.factorial(k)
+print(f"\nQ2.1(i) P(Exactly 2): {pois(2):.4f}")
+print(f"Q2.1(ii) P(At most 1): {pois(0) + pois(1):.4f}")
+
+# Q2.2: Bridge Hand Probability (Multivariate Hypergeometric)
+comb = math.comb
+prob_bridge = (comb(13, 5) * comb(13, 2) * comb(13, 3) * comb(13, 3)) / comb(52, 13)
+print(f"\nQ2.2 Bridge Hand Prob: {prob_bridge:.6f}")
