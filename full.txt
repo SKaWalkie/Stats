@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import uniform, poisson
 
-print("--- SLIP 1 ---")
 # Q.1: Uniform Distribution U(100, 200)
 a, b = 100, 200
 print("Q1 (i) P(X > 150):", uniform.sf(150, loc=a, scale=b-a))
@@ -45,7 +44,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, binom
 
-print("--- SLIP 2 ---")
 # Q.1: Normal Distribution N(50, 100)
 mu, var = 50, 100
 sigma = np.sqrt(var)
@@ -86,7 +84,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm, binom, hypergeom
 
-print("--- SLIP 3 ---")
 # Q.1: Sampling Distribution
 mu, sigma, n = 45, 12, 36
 se = sigma / np.sqrt(n)
@@ -121,7 +118,6 @@ print("Q2.2 (ii) P(Discover both faulty compressors):", hypergeom.pmf(2, N_total
 import numpy as np
 from scipy.stats import chi2, poisson, binom
 
-print("--- SLIP 4 ---")
 # Q.1: Confidence Interval for Variance
 n_samples, s2 = 12, 0.0013
 df = n_samples - 1
@@ -166,7 +162,6 @@ print(f"Q2.2 Probability of no disease given negative test: {p_not_d_given_neg:.
 import numpy as np
 from scipy.stats import norm, hypergeom
 
-print("--- SLIP 5 ---")
 # Q.1: Confidence Interval for Mean
 n_packets, xbar, s = 100, 185, 30
 print("Q1 (i) We can use the Normal Distribution due to the Central Limit Theorem because the sample size (n=100) is sufficiently large (n >= 30).")
@@ -199,7 +194,6 @@ print("Q2.2 (ii) P(At most 2 will not fire):", hypergeom.cdf(2, N_total, K_def, 
 import numpy as np
 from scipy.stats import binom, norm
 
-print("--- SLIP 6 ---")
 # Q.1: Normal Approximation of Binomial
 n_visitors, p_buy = 400, 0.25
 q_buy = 1 - p_buy
@@ -237,7 +231,6 @@ print(f"\nQ2.2 Mean of aces drawn: {mean_hyp:.4f}, Variance: {var_hyp:.4f}")
 import numpy as np
 from scipy.stats import chi2, t, poisson
 
-print("--- SLIP 7 ---")
 # Q.1: Confidence Intervals
 data = [7.72, 9.58, 12.38, 7.77, 11.27, 8.80, 11.10, 7.80, 10.17, 6.00]
 n_data = len(data)
@@ -279,7 +272,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import uniform, binom, poisson
 
-print("--- SLIP 8 ---")
 # Q.1: Uniform Distribution
 a, b = 100, 200
 print("Q1 (i) P(X > 150):", uniform.sf(150, loc=a, scale=b-a))
@@ -314,7 +306,6 @@ print(f"\nQ2.2 Minimum percent of values between 123 and 179: {prob_range * 100}
 import numpy as np
 from scipy.stats import chi2, norm, binom
 
-print("--- SLIP 9 ---")
 # Q.1: Confidence Interval for Variance
 data_var = [12, 15, 14, 10, 13, 11, 16, 14, 13, 12]
 n_var = len(data_var)
@@ -351,7 +342,6 @@ print(f"\nQ2.2 P(Spam | contains word 'Free'): {p_spam_given_free:.4f}")
 import numpy as np
 from scipy.stats import chi2, binom
 
-print("--- SLIP 10 ---")
 # Q.1: Confidence interval for variance (unknown mean)
 data = [8, 10, 7, 9, 11, 6, 10, 9, 8]
 n = len(data)
@@ -385,7 +375,6 @@ Here are the complete Python solutions for Slips 11 through 20. The code is writ
 import numpy as np
 from scipy.stats import norm, binom
 
-print("--- SLIP 11 ---")
 # Q.1: Confidence Interval for Mean (Known Standard Deviation)
 sigma = 0.05
 n_samples = 40
@@ -429,7 +418,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 
-print("--- SLIP 12 ---")
 # Q.1: Normal Approximation of Binomial
 n_tosses = 300
 p_heads = 0.5
@@ -484,7 +472,6 @@ import numpy as np
 from scipy.stats import chi2, poisson
 import math
 
-print("--- SLIP 13 ---")
 # Q.1: Confidence Interval for Variance
 data_melons = [7.72, 9.58, 12.38, 7.77, 11.27, 8.80, 11.10, 7.80, 10.17, 6.00]
 n = len(data_melons)
@@ -534,7 +521,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import t
 
-print("--- SLIP 14 ---")
 # Q.1: Confidence interval for mean (unknown std deviation)
 data_latency = [120, 150, 135, 160, 145, 130, 140, 155, 150, 142, 138, 148]
 n_lat = len(data_latency)
@@ -597,7 +583,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import uniform, poisson
 
-print("--- SLIP 15 ---")
 # Q.1: Uniform Distribution U(5, 15)
 a, b = 5, 15
 theoretical_mean = (a + b) / 2
@@ -643,7 +628,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 
-print("--- SLIP 16 ---")
 # Q.1: Sampling Distribution
 mu, sigma, n = 45, 12, 36
 se = sigma / np.sqrt(n)
@@ -682,7 +666,6 @@ print(f"Q2.2 Variance of getting aces: {var_hyp:.4f}")
 import numpy as np
 from scipy.stats import norm, binom
 
-print("--- SLIP 17 ---")
 # Q.1: Normal Approximation of Binomial
 n_houses, p_moto = 160, 0.3
 q_moto = 1 - p_moto
@@ -721,7 +704,6 @@ print(f"\nQ2.2 P(Card is King | Card is Face Card): {prob_king_given_face:.4f}")
 import numpy as np
 from scipy.stats import chi2, binom
 
-print("--- SLIP 18 ---")
 # Q.1: Confidence Interval for Variance
 n_samples = 12
 s2 = 0.0013
@@ -759,7 +741,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import t, poisson
 
-print("--- SLIP 19 ---")
 # Q.1: Confidence interval for mean
 data_latency = [120, 150, 135, 160, 145, 130, 140, 155, 150, 142, 138, 148]
 n_lat = len(data_latency)
@@ -807,7 +788,6 @@ print(f"Q2.2 P(At least 1 call): {1 - poisson.pmf(0, lam_calls):.4f}")
 import numpy as np
 from scipy.stats import norm, hypergeom, poisson
 
-print("--- SLIP 20 ---")
 # Q.1: Normal Distribution
 mu_marks, sigma_marks = 70, 8
 
@@ -842,7 +822,6 @@ print(f"Q2.2 (iii) P(At least 1 customer): {1 - poisson.pmf(0, lam_arr):.4f}")
 import numpy as np
 from scipy.stats import chi2, hypergeom
 
-print("--- SLIP 21 ---")
 # Q.1: Confidence Interval for Variance
 data_melons = [7.72, 9.58, 12.38, 7.77, 11.27, 8.80, 11.10, 7.80, 10.17, 6.00]
 n = len(data_melons)
@@ -887,7 +866,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import t
 
-print("--- SLIP 22 ---")
 # Q.1: Confidence interval for mean (unknown std deviation)
 data_latency = [120, 150, 135, 160, 145, 130, 140, 155, 150, 142, 138, 148]
 n_lat = len(data_latency)
@@ -940,7 +918,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import uniform, poisson
 
-print("--- SLIP 23 ---")
 # Q.1: Uniform Distribution U(5, 15)
 a, b = 5, 15
 theoretical_mean = (a + b) / 2
@@ -986,7 +963,6 @@ print(f"Q2.2 P(At least 1 call): {1 - poisson.pmf(0, lam_calls):.4f}")
 import numpy as np
 from scipy.stats import chi2
 
-print("--- SLIP 24 ---")
 # Q.1: Confidence Interval for Variance
 n_samples = 12
 s2 = 0.0013
@@ -1036,7 +1012,6 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm, poisson
 import math
 
-print("--- SLIP 25 ---")
 # Q.1: Sampling Distribution
 mu = 60
 sigma = 18
