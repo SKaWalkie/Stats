@@ -1,25 +1,27 @@
 Slip 1
 ### Q.1
-(1)
 a = 100
 b = 200
+
 prob = (b - 150) / (b - a)
 print("P(X > 150) =", prob)
+
 mean = (a + b) / 2
-variance = ((b - a) \*\* 2) / 12
+variance = ((b - a) ** 2) / 12
 print("Mean =", mean)
 print("Variance =", variance)
+
 import numpy as np
 import matplotlib.pyplot as plt
+
 x = np.linspace(80, 220, 1000)
-y = np.where((x >= 100) \& (x <= 200), 1/(b-a), 0)
+y = np.where((x >= 100) & (x <= 200), 1/(b-a), 0)
+
 plt.plot(x, y)
 plt.title("Uniform Distribution U(100,200)")
 plt.xlabel("x (hours)")
 plt.ylabel("f(x)")
 plt.show()
-
-
 
 
 ### Q.2
