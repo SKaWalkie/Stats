@@ -128,9 +128,18 @@ print(f"Q2.1 Chebyshev Probability >= {1 - (1.2/4)**2:.4f}\n")
 
 # Q2.2: Hypergeometric Distribution (Population N=52, Successes K=4, Sample n=5)
 # *Note: Interpreted as mean/variance of the distribution + prob of exactly 2 aces.
-print(f"Q2.2 Mean of Aces Drawn: {5 * (4/52):.4f}")
-print(f"Q2.2 Variance of Aces Drawn: {5 * (4/52) * (48/52) * (47/51):.4f}")
-print(f"Q2.2 Probability of EXACTLY 2 Aces: {(math.comb(4, 2) * math.comb(48, 3)) / math.comb(52, 5):.4f}")
+N=52
+K=4
+n=5
+
+mean = n*(K/N)
+variance = n*(K/N)*(1-K/N)*((N-n)/(N-1))
+
+p2 = (math.comb(4,2)*math.comb(48,3))/math.comb(52,5)
+
+print("Mean =", mean)
+print("Variance =", variance)
+print("P(exactly 2 aces) =", p2)
 
 SLIP-7
 
@@ -226,9 +235,17 @@ print(f"Q2.1 Mean: {n * p:.2f} | Variance: {n * p * (1 - p):.2f}\n")
 
 # Q2.2: Hypergeometric Distribution (Population N=52, Aces K=4, Sample n=5)
 # *Interpreted as mean/variance of the drawn aces + probability of exactly 2
-print(f"Q2.2 Mean of Aces Drawn: {5 * (4/52):.4f}")
-print(f"Q2.2 Variance of Aces Drawn: {5 * (4/52) * (48/52) * (47/51):.4f}")
-print(f"Q2.2 P(Exactly 2 Aces): {(math.comb(4, 2) * math.comb(48, 3)) / math.comb(52, 5):.4f}")
+# Q2.2: Hypergeometric Distribution (N=52 cards, K=4 aces, n=5 drawn)
+
+N, K, n = 52, 4, 5
+
+mean = n * (K / N)
+variance = n * (K / N) * (1 - K / N) * ((N - n) / (N - 1))
+p_exactly_2 = (math.comb(4, 2) * math.comb(48, 3)) / math.comb(52, 5)
+
+print(f"Q2.2 Mean = {mean:.4f}")
+print(f"Q2.2 Variance = {variance:.4f}")
+print(f"Q2.2 P(Exactly 2 Aces) = {p_exactly_2:.4f}")
 
 SLIP-11
 
@@ -254,7 +271,8 @@ import math, numpy as np, matplotlib.pyplot as plt
 
 # Q1: Normal Approximation (n=300, p=0.5 => mu=150, var=75)
 print("Q1(i) Condition check: np=150 >= 5 and nq=150 >= 5. Approximation is valid.")
-cdf = lambda x: 0.5 * (1 + math.erf((x - 150) / math.sqrt(150) / math.sqrt(2))) # using var=75, so sd=sqrt(75) wait, denominator is sqrt(2*var) = sqrt(150)
+sd = math.sqrt(75)
+cdf = lambda x: 0.5*(1+math.erf((x-150)/(sd*math.sqrt(2)))) # using var=75, so sd=sqrt(75) wait, denominator is sqrt(2*var) = sqrt(150)
 print(f"Q1(ii) P(140<=X<=170) w/ continuity correction: {cdf(170.5) - cdf(139.5):.4f}\n")
 
 # Q1(iii): Plot and shade region
@@ -372,9 +390,17 @@ print(f"\nQ2.1 Mean: {n * p:.2f} | Variance: {n * p * (1 - p):.2f}")
 
 # Q2.2: Hypergeometric Distribution (Population N=52, Aces K=4, Sample n=5)
 # *Note: Interpreted as finding the mean/variance of the drawn aces + probability of exactly 2.
-print(f"\nQ2.2 Mean of Aces Drawn: {5 * (4/52):.4f}")
-print(f"Q2.2 Variance of Aces Drawn: {5 * (4/52) * (48/52) * (47/51):.4f}")
-print(f"Q2.2 P(Exactly 2 Aces): {(math.comb(4, 2) * math.comb(48, 3)) / math.comb(52, 5):.4f}")
+# Q2.2: Hypergeometric Distribution (N=52 cards, K=4 aces, n=5 drawn)
+
+N, K, n = 52, 4, 5
+
+mean = n * (K / N)
+variance = n * (K / N) * (1 - K / N) * ((N - n) / (N - 1))
+p_exactly_2 = (math.comb(4, 2) * math.comb(48, 3)) / math.comb(52, 5)
+
+print(f"Q2.2 Mean = {mean:.4f}")
+print(f"Q2.2 Variance = {variance:.4f}")
+print(f"Q2.2 P(Exactly 2 Aces) = {p_exactly_2:.4f}")
 
 SLIP-17
 
