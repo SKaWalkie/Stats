@@ -1,0 +1,1286 @@
+Slip 1
+### Q.1
+(1)
+a = 100
+b = 200
+prob = (b - 150) / (b - a)
+print("P(X > 150) =", prob)
+mean = (a + b) / 2
+variance = ((b - a) \*\* 2) / 12
+print("Mean =", mean)
+print("Variance =", variance)
+import numpy as np
+import matplotlib.pyplot as plt
+x = np.linspace(80, 220, 1000)
+y = np.where((x >= 100) \& (x <= 200), 1/(b-a), 0)
+plt.plot(x, y)
+plt.title("Uniform Distribution U(100,200)")
+plt.xlabel("x (hours)")
+plt.ylabel("f(x)")
+plt.show()
+
+
+
+
+### Q.2
+
+(1)
+# Step 1: find K
+# equation: 0.1 + K + 0.2 + 2K + 0.3 + K = 1
+K = (1 - (0.1 + 0.2 + 0.3)) / 4
+print("K =", K)
+# Step 2: CDF
+F1 = 0.1
+F2 = F1 + K
+F3 = F2 + 0.2
+F4 = F3 + 2\*K
+F5 = F4 + 0.3
+F6 = F5 + K
+print("CDF:", F1, F2, F3, F4, F5, F6)
+
+
+(2)
+import math
+lam = 4
+P0 = math.exp(-lam)
+P3 = math.exp(-lam) \* lam\*\*3 / math.factorial(3)
+P1 = math.exp(-lam) \* lam
+P\_atleast2 = 1 - (P0 + P1)
+print("P(0) =", P0)
+print("P(3) =", P3)
+print("P(X>=2) =", P\_atleast2)
+
+Slip 2
+### Q.1
+(1)
+import numpy as np
+import matplotlib.pyplot as plt
+\# parameters
+mu = 50
+sigma = 100
+\# generate 1000 samples
+data = np.random.normal(mu, sigma, 1000)
+\# (i) sample mean and variance
+sample\_mean = np.mean(data)
+sample\_var = np.var(data)
+print("Sample Mean =", sample\_mean)
+print("Sample Variance =", sample\_var)
+
+\# (ii) theoretical values
+print("Theoretical Mean =", mu)
+print("Theoretical Variance =", sigma\*\*2)
+\# (iii) histogram with normal curve
+count, bins, ignored = plt.hist(data, density=True)
+
+\# normal curve
+x = np.linspace(min(bins), max(bins), 1000)
+y = (1/(sigma\*np.sqrt(2\*np.pi))) \* np.exp(-(x-mu)\*\*2/(2\*sigma\*\*2))
+plt.plot(x, y)
+plt.title("Histogram with Normal Curve")
+plt.show()
+
+
+
+### 
+### Q.2
+(1)
+sigma = 1.2
+distance = 4
+k = distance / sigma
+# Apply Chebyshev's theorem
+probability = 1 - 1 / (k \*\* 2)
+print("k =", k)
+print("Minimum probability within 4 hours of the mean =", probability)
+
+(2)
+import math
+n = 10
+p = 0.4
+P0 = math.comb(n,0)\*(p\*\*0)\*((1-p)\*\*10)
+P1 = math.comb(n,1)\*(p\*\*1)\*((1-p)\*\*9)
+P2 = math.comb(n,2)\*(p\*\*2)\*((1-p)\*\*8)
+P3 = math.comb(n,3)\*(p\*\*3)\*((1-p)\*\*7)
+result = P0 + P1 + P2 + P3
+print(result)
+
+##### or
+
+###### from scipy.stats import binom
+###### 
+###### print(binom.cdf(3, 10, 0.4))
+
+Slip 3
+### Q.1
+(1)
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+from scipy.stats import norm
+\# given values
+mu = 45
+sigma = 12
+n = 36
+
+\# (i) Standard Error
+SE = sigma / math.sqrt(n)
+print("Standard Error =", SE)
+
+\# (ii) Probability P(X̄ > 48)
+z = (48 - mu) / SE
+prob = 1 - norm.cdf(z)
+print("Probability =", prob)
+
+\# (iii) Plot
+x = np.linspace(35, 55, 1000)
+y = norm.pdf(x, mu, SE)
+plt.plot(x, y)
+plt.axvline(48)
+plt.title("Sampling Distribution")
+plt.show()
+
+
+
+
+### Q.2
+(1)
+import math
+n = 15
+p = 0.1
+k = 2
+prob = math.comb(n, k) \* (p\*\*k) \* ((1-p)\*\*(n-k))
+print(prob)
+
+(2)
+import math
+N = 15   # total
+K = 2    # faulty in batch
+n = 5    # sample size
+x = 1    # want 1 faulty
+p1 = math.comb(K, x) \* math.comb(N-K, n-x) / math.comb(N, n)
+p\_both = math.comb(K, 2) \* math.comb(N-K, n-2) / math.comb(N, n)
+print(p)
+print(p\_both)
+
+Slip 4
+### Q.1
+(1)
+&#x20;import math
+&#x20;from scipy.stats import chi2
+&#x20;n=12
+&#x20;sample\_variance=0.0013
+&#x20;alpha=0.05
+&#x20;degrees\_of\_freedom=n-1
+&#x20;
+&#x20;chi2\_lower=chi2.ppf(alpha/2, degrees\_of\_freedom)
+&#x20;chi2\_upper=chi2.ppf(1-alpha/2, degrees\_of\_freedom)
+&#x20;lower\_var=(degrees\_of\_freedom\*sample\_variance)/chi2\_upper
+&#x20;upper\_var=(degrees\_of\_freedom\*sample\_variance)/chi2\_lower
+&#x20;lower\_sd=math.sqrt(lower\_var)
+&#x20;upper\_sd=math.sqrt(upper\_var)
+
+
+
+
+### Q.2
+(1)
+from math import exp, factorial, comb
+# Poisson
+lambda = 3
+P\_poisson\_2 = (exp(-lambda) \* lambda\*\*2) / factorial(2)
+P\_poisson\_atleast1 = 1 - exp(-lambda) 
+print("Poisson P(X=2):", P\_poisson\_2)
+print("Poisson P(X>=1):", P\_poisson\_atleast1)
+# Binomial
+n = 10
+p = lambda / n
+P\_binomial\_2 = comb(n, 2) \* (p\*\*2) \* ((1-p)\*\*(n-2))
+P\_binomial\_atleast1 = 1 - ((1-p)\*\*n)
+print("Binomial P(X=2):", P\_binomial\_2)
+print("Binomial P(X>=1):", P\_binomial\_atleast1)
+
+
+
+
+(2)
+\# Given values
+p\_disease = 0.02
+p\_no\_disease = 1 - p\_disease
+sensitivity = 0.93      # P(Positive | Disease)
+specificity = 0.94      # P(Negative | No Disease)
+
+\# Derived values
+false\_positive = 1 - specificity   # P(Positive | No Disease)
+false\_negative = 1 - sensitivity   # P(Negative | Disease)
+
+\# Probability of a positive test
+p\_positive = (sensitivity \* p\_disease) + (false\_positive \* p\_no\_disease)
+\# Probability of disease given positive test
+
+p\_d\_given\_positive = (sensitivity \* p\_disease) / p\_positive
+
+\# Probability of a negative test
+p\_negative = (false\_negative \* p\_disease) + (specificity \* p\_no\_disease)
+
+
+\# Probability of no disease given negative test
+p\_notd\_given\_negative = (specificity \* p\_no\_disease) / p\_negative
+
+
+\# Print results
+print("P(Disease | Positive) =", p\_d\_given\_positive)
+print("P(No Disease | Negative) =", p\_notd\_given\_negative)
+
+Slip 5
+### Q.1
+(1)
+(i) Why Normal Distribution can be used?
+Because of the Central Limit Theorem (CLT):
+import math
+from scipy.stats import norm
+x\_bar = 185
+s = 30
+n = 100
+confidence = 0.99
+alpha = 1 - confidence
+z = norm.ppf(1 - alpha / 2)
+se = s / math.sqrt(n)
+me = z \* se
+lower = x\_bar - me
+upper = x\_bar + me
+print("Confidence Interval:", lower, upper)
+
+
+
+
+
+### Q.2
+(1)
+K = 1/26
+F0 = K
+F1 = K + 3\*K
+F2 = F1 + 5\*K
+F3 = F2 + 7\*K
+F4 = F3 + 9\*K
+F5 = F4 + K
+print(F0, F1, F2, F3, F4, F5)
+
+
+
+
+
+(2)
+import math
+# given values
+N = 10        # total missiles
+K = 3         # defective
+n = 4         # selected
+
+# (i) all 4 fire
+P\_all\_fire = math.comb(N-K, n) / math.comb(N, n)
+
+# (ii) at most 2 defective
+P0 = math.comb(K,0) \* math.comb(N-K, 4) / math.comb(N, n)
+P1 = math.comb(K,1) \* math.comb(N-K, 3) / math.comb(N, n)
+P2 = math.comb(K,2) \* math.comb(N-K, 2) / math.comb(N, n)
+P\_atmost2 = P0 + P1 + P2
+print("P(all fire) =", P\_all\_fire)
+print("P(at most 2 defective) =", P\_atmost2)
+
+##### OR
+
+import math
+from scipy.stats import hypergeom
+N = 10   # total missiles
+K = 3    # defective (won't fire)
+n = 4    # selected
+
+# (i) all 4 will fire => X = 0 defective
+p\_all\_fire = hypergeom.pmf(0, N, K, n)
+
+# (ii) at most 2 will not fire => X <= 2
+p\_at\_most\_2\_fail = hypergeom.cdf(2, N, K, n)
+print("P(all 4 fire) =", p\_all\_fire)
+print("P(at most 2 will not fire) =", p\_at\_most\_2\_fail)
+
+
+Slip 6
+### Q.1
+(1)
+import math
+from scipy.stats import norm, binom
+# given values
+n = 400
+p = 0.25
+q = 1 - p
+
+# (i) mean and variance
+mu = n \* p
+variance = n \* p \* q
+sigma = math.sqrt(variance)
+
+# (ii) Normal approximation with continuity correction
+z = (119.5 - mu) / sigma
+prob\_normal = 1 - norm.cdf(z)
+
+# (iii) Exact binomial
+prob\_binomial = 1 - binom.cdf(119, n, p)
+
+# output
+
+print("Mean =", mu)
+print("Variance =", variance)
+print("Normal Approx =", prob\_normal)
+print("Exact Binomial =", prob\_binomial)
+
+
+### Q.2
+(1)
+sigma = 1.2
+distance = 4
+k = distance / sigma
+# Apply Chebyshev's theorem
+probability = 1 - 1 / (k \*\* 2)
+print("k =", k)
+print("Minimum probability within 4 hours of the mean =", probability)
+
+
+(2)
+N = 52
+K = 4
+n = 5
+mean = n \* K / N
+variance = (n \* K \* (N-K) \* (N-n)) / (N \*\* 2 \* (N-1))
+print("Mean =", mean)
+print("Variance =", variance)
+
+Slip 7
+### Q.1
+(1)
+import numpy as np
+import math
+from scipy.stats import chi2
+\# data
+x = \[7.72, 9.58, 12.38, 7.77, 11.27, 8.80, 11.10, 7.80, 10.17, 6.00]
+n = len(x)
+\# sample variance
+s2 = np.var(x, ddof=1)
+\# chi-square values (df = n-1 = 9)
+df = n - 1
+alpha = 0.05
+chi2\_lower = chi2.ppf(alpha/2, df)
+chi2\_upper = chi2.ppf(1 - alpha/2, df)
+\# confidence interval for variance
+lower = (df \* s2) / chi2\_upper
+upper = (df \* s2) / chi2\_lower
+print("Sample Variance =", s2)
+print("95% CI for variance =", lower, upper)
+
+
+
+
+
+### Q.2
+(1)
+import math
+lamda = 1.2
+P0 = math.exp(-lamda)
+P1 = math.exp(-lamda)\*lamda
+P2 = math.exp(-lamda)\*lamda\*\*2/2
+P3 = math.exp(-lamda)\*lamda\*\*3/6
+print("P(1) =", P1)
+print("P(X<=2) =", P0 + P1 + P2)
+print("P(X>3) =", 1 - (P0 + P1 + P2 + P3))
+
+
+
+
+
+(2)
+PA = 0.7
+PB = 0.3
+P\_D\_given\_A = 0.02
+P\_D\_given\_B = 0.05
+P\_D = P\_D\_given\_A \* PA + P\_D\_given\_B \* PB
+P\_A\_given\_D = (P\_D\_given\_A \* PA) / P\_D
+print(P\_A\_given\_D)
+
+
+Slip 8
+### Q.1
+(1)
+a = 100
+b = 200
+prob = (b - 150) / (b - a)
+print("P(X > 150) =", prob)
+mean = (a + b) / 2
+variance = ((b - a) \*\* 2) / 12
+print("Mean =", mean)
+print("Variance =", variance)
+
+import numpy as np
+import matplotlib.pyplot as plt
+x = np.linspace(80, 220, 1000)
+y = np.where((x >= 100) \& (x <= 200), 1/(b-a), 0)
+plt.plot(x, y)
+plt.title("Uniform Distribution U(100,200)")
+plt.xlabel("x (hours)")
+plt.ylabel("f(x)")
+plt.show()
+
+### Q.2
+(1)
+import math
+lam = 0.8
+P0 = math.exp(-lam)
+P3 = math.exp(-lam) \* lam\*\*3 / math.factorial(3)
+print("P(0) =", P0)
+print("P(3) =", P3)
+
+(2)
+mu = 151
+variance = 196
+sigma = variance\*\*0.5
+lower = 123
+upper = 179
+k = (upper - mu) / sigma
+prob = 1 - 1/(k\*\*2)
+print("k =", k)
+print("Percentage =", prob\*100)
+
+Slip 9
+### Q.1
+(1)
+import numpy as np
+from scipy.stats import chi2
+# data
+x = \[12,15,14,10,13,11,16,14,13,12]
+n = len(x)
+df = n - 1
+s2 = np.var(x, ddof=1)    # sample variance
+alpha = 0.05
+# chi-square critical values
+chi2\_low  = chi2.ppf(alpha/2, df)       # 0.025
+chi2\_high = chi2.ppf(1 - alpha/2, df)   # 0.975
+# 95% CI for population variance sigma^2
+lower = (df \* s2) / chi2\_high
+upper = (df \* s2) / chi2\_low
+print("n =", n)
+print("sample mean =", x.mean())
+print("sample variance s^2 =", s2)
+print("95% CI for population variance (sigma^2):", (lower, upper))
+
+### Q.2
+(1)
+import math
+from scipy.stats import norm, binom
+# given values
+n = 400
+p = 0.25
+q = 1 - p
+
+# (i) mean and variance
+mu = n \* p
+variance = n \* p \* q
+sigma = math.sqrt(variance)
+
+# (ii) Normal approximation with continuity correction
+z = (119.5 - mu) / sigma
+prob\_normal = 1 - norm.cdf(z)
+
+# (iii) Exact binomial
+prob\_binomial = 1 - binom.cdf(119, n, p)
+
+# output
+
+print("Mean =", mu)
+print("Variance =", variance)
+print("Normal Approx =", prob\_normal)
+print("Exact Binomial =", prob\_binomial)
+
+(2)
+P\_S = 0.4
+P\_notS = 0.6
+P\_free\_given\_S = 0.7
+P\_free\_given\_notS = 0.05
+P\_free = P\_free\_given\_S \* P\_S + P\_free\_given\_notS \* P\_notS
+P\_S\_given\_free = (P\_free\_given\_S \* P\_S) / P\_free
+print(P\_S\_given\_free)
+
+Slip 10
+### Q.1
+(1)
+import numpy as np
+from scipy.stats import chi2
+x = \[8, 10, 7, 9, 11, 6, 10, 9, 8]
+n = len(x)
+df = n - 1
+s2 = np.var(x, ddof=1)    # sample variance (unknown mean)
+alpha = 0.05
+chi2\_low  = chi2.ppf(alpha/2, df)        # 0.025
+chi2\_high = chi2.ppf(1 - alpha/2, df)    # 0.975
+# 95% CI for population variance sigma^2
+lower = (df \* s2) / chi2\_high
+upper = (df \* s2) / chi2\_low
+
+print("n =", n)
+print("sample mean =", x.mean())
+print("sample variance s^2 =", s2)
+print("95% CI for sigma^2 =", (lower, upper))
+
+### Q.2
+(1)
+n = 600
+p = 0.04
+q = 1 - p
+mean = n \* p
+variance = n \* p \* q
+print("Mean =", mean)
+print("Variance =", variance)
+
+(2)
+N = 52
+K = 4
+n = 5
+mean = n \* (K/N)
+variance = n \* (K/N) \* ((N-K)/N) \* ((N-n)/(N-1))
+print("Mean =", mean)
+print("Variance =", variance)
+
+Slip 11
+### Q.1
+(1)
+import math
+from scipy.stats import norm
+sigma = 0.05
+n = 40
+mean = 2.5
+alpha = 0.05
+z = norm.ppf(1 - alpha/2)         # 1.96
+se = sigma / math.sqrt(n)
+lower = mean - z \* se
+upper = mean + z \* se
+print("z =", z)
+print("SE =", se)
+print("95% CI for mean =", (lower, upper))
+
+### Q.2
+(1)
+import math
+N = 5000   # total tires
+K = 1000   # blemished
+n = 10     # bought
+x = 3      # exactly 3 blemished
+lam = n \* (K / N)
+p = math.exp(-lam) \* lam\*\*x / math.factorial(x)
+print(p)
+
+(2)
+import math
+n = 800
+p = 0.65
+q = 1 - p
+mean = n \* p
+sd = math.sqrt(n \* p \* q)
+print("Mean =", mean)
+print("Standard Deviation =", sd)
+
+Slip 12
+### Q.1
+(1)
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+import math
+# given
+n = 300
+p = 0.5
+q = 1 - p
+mu = n\*p
+sigma = math.sqrt(n\*p\*q)
+# probability
+z1 = (139.5 - mu)/sigma
+z2 = (170.5 - mu)/sigma
+prob = norm.cdf(z2) - norm.cdf(z1)
+print("Probability =", prob)
+# plot
+x = np.linspace(120, 180, 1000)
+y = norm.pdf(x, mu, sigma)
+plt.plot(x, y)
+plt.fill\_between(x, y, where=(x>=139.5) \& (x<=170.5))
+plt.title("Normal Approximation")
+plt.show()
+
+### Q.2
+(1)
+# find K first
+K = (1 - (0.2 + 0.3)) / 6
+F1 = 2\*K
+F2 = F1 + K
+F3 = F2 + 0.2
+F4 = F3 + 2\*K
+F5 = F4 + 0.3
+F6 = F5 + K
+print("K =", K)
+print(F1, F2, F3, F4, F5, F6)
+
+(2)
+P\_S = 0.4
+P\_notS = 0.6
+P\_free\_given\_S = 0.7
+P\_free\_given\_notS = 0.05
+P\_free = P\_free\_given\_S \* P\_S + P\_free\_given\_notS \* P\_notS
+P\_S\_given\_free = (P\_free\_given\_S \* P\_S) / P\_free
+print(P\_S\_given\_free)
+
+Slip 13
+### Q.1
+(1)
+import numpy as np
+import math
+from scipy.stats import chi2
+
+\# data
+x = \[7.72, 9.58, 12.38, 7.77, 11.27, 8.80, 11.10, 7.80, 10.17, 6.00]
+n = len(x)
+\# sample variance
+s2 = np.var(x, ddof=1)
+
+\# chi-square values (df = n-1 = 9)
+df = n - 1
+alpha = 0.05
+chi2\_lower = chi2.ppf(alpha/2, df)
+chi2\_upper = chi2.ppf(1 - alpha/2, df)
+
+\# confidence interval for variance
+lower = (df \* s2) / chi2\_upper
+upper = (df \* s2) / chi2\_lower
+
+print("Sample Variance =", s2)
+print("95% CI for variance =", lower, upper)
+
+### Q.2
+(1)
+import math
+# given values
+green = 3
+blue = 2
+red = 4
+N = green + blue + red
+n = 5
+total = math.comb(N, n)
+favorable = math.comb(blue,2) \* (math.comb(green+red,3) - math.comb(green,3))
+print("Probability =", favorable / total)
+
+
+(2)
+import math
+n = 600
+p = 0.002
+lam = n \* p   
+p2 = math.exp(-lam) \* (lam\*\*2) / math.factorial(2)
+p0 = math.exp(-lam)
+p1 = math.exp(-lam) \* lam
+p\_atmost\_1 = p0 + p1
+print("lambda =", lam)
+print("P(X=2) =", p2)
+print("P(X<=1) =", p\_le1)
+
+Slip 14
+### Q.1
+(1)
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import t
+import math
+# data
+x = \[120,150,135,160,145,130,140,155,150,142,138,148]
+n = len(x)
+# mean
+mean = np.mean(x)
+# std dev
+s = np.std(x, ddof=1)
+# standard error
+SE = s / math.sqrt(n)
+# t value
+t\_val = t.ppf(0.975, n-1)
+# confidence interval
+lower = mean - t\_val \* SE
+upper = mean + t\_val \* SE
+print("Mean =", mean)
+print("95% CI =", lower, upper)
+
+# plot
+plt.plot(x, 'o-')
+plt.axhline(mean, linestyle='--')
+plt.axhline(lower, linestyle='--')
+plt.axhline(upper, linestyle='--')
+plt.title("Sample Data with Confidence Interval")
+plt.show()
+
+### Q.2
+(1)
+import math
+n = 979
+p = 1/22
+q = 1 - p
+mu = n \* p
+sigma = math.sqrt(n \* p \* q)
+k = (64 - mu) / sigma
+prob = 1 - 1 / (k\*\*2)
+print("Mean =", mu)
+print("Sigma =", sigma)
+print("Upper bound probability =", prob)
+
+(2)
+# probabilities
+E = 1\*(1/4) + 2\*(1/2) + 5\*(1/4)
+E2 = 1\*\*2\*(1/4) + 2\*\*2\*(1/2) + 5\*\*2\*(1/4)
+variance = E2 - E\*\*2
+print("Mean =", E)
+print("Variance =", variance)
+
+
+Slip 15
+### Q.1
+(1)
+import numpy as np
+import matplotlib.pyplot as plt
+# given
+a = 5
+b = 15
+# theoretical
+mean\_theory = (a + b) / 2
+var\_theory = (b - a)\*\*2 / 12
+print("Theoretical Mean =", mean\_theory)
+print("Theoretical Variance =", var\_theory)
+# generate samples
+data = np.random.uniform(a, b, 10000)
+# sample mean \& variance
+mean\_sample = np.mean(data)
+var\_sample = np.var(data)
+print("Sample Mean =", mean\_sample)
+print("Sample Variance =", var\_sample)
+# plot
+plt.hist(data, bins=50, density=True)
+plt.title("Uniform Distribution U(5,15)")
+plt.show()
+
+### Q.2
+(1)
+mu = 151
+variance = 196
+sigma = variance\*\*0.5
+lower = 123
+upper = 179
+# find k
+distance = upper - mu
+k = distance / sigma
+# probability
+prob = 1 - 1/(k\*\*2)
+print("k =", k)
+print("Percentage =", prob\*100)
+
+(2)
+import math
+lam = 4
+P2 = math.exp(-lam)\*lam\*\*2/math.factorial(2)
+P3 = math.exp(-lam)\*lam\*\*3/math.factorial(3)
+P4 = math.exp(-lam)\*lam\*\*4/math.factorial(4)
+P5 = math.exp(-lam)\*lam\*\*5/math.factorial(5)
+print(P2 + P3 + P4 + P5)
+
+Slip 16
+### Q.1
+(1)
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+from scipy.stats import norm
+
+\# given values
+mu = 45
+sigma = 12
+n = 36
+
+\# (i) Standard Error
+SE = sigma / math.sqrt(n)
+print("Standard Error =", SE)
+
+\# (ii) Probability P(X̄ > 48)
+z = (48 - mu) / SE
+prob = 1 - norm.cdf(z)
+print("Probability =", prob)
+
+\# (iii) Plot
+x = np.linspace(35, 55, 1000)
+y = norm.pdf(x, mu, SE)
+plt.plot(x, y)
+plt.axvline(48)
+plt.title("Sampling Distribution")
+plt.show()
+
+### Q.2
+(1)
+n = 900
+p = 0.06
+q = 1 - p
+mean = n \* p
+variance = n \* p \* q
+print("Mean =", mean)
+print("Variance =", variance)
+
+(2)
+N = 52
+K = 4
+n = 5
+mean = n \* K / N
+variance = (n \* K \* (N-K) \* (N-n)) / (N \*\* 2 \* (N-1))
+print("Mean =", mean)
+print("Variance =", variance)
+
+Slip 17
+### Q.1
+(1)
+import math
+from scipy.stats import norm, binom
+n = 160
+p = 0.3
+q = 1 - p
+# mean and sd
+mu = n \* p
+sigma = math.sqrt(n \* p \* q)
+# normal approximation
+z = (50.5 - mu) / sigma
+prob\_normal = norm.cdf(z)
+# exact binomial
+prob\_binomial = binom.cdf(50, n, p)
+print("Normal Approx =", prob\_normal)
+print("Exact Binomial =", prob\_binomial)
+
+### Q.2
+(1)
+n = 600
+p = 0.04
+q = 1 - p
+mean = n \* p
+variance = n \* p \* q
+print("Mean =", mean)
+print("Variance =", variance)
+(2)
+total\_cards = 52
+kings = 4
+face\_cards = 12
+prob = (kings/total\_cards) / (face\_cards/total\_cards)
+print(prob)
+
+Slip 18
+### Q.1
+(1)
+&#x20;n=12
+&#x20;sample\_variance=0.0013
+&#x20;alpha=0.05
+&#x20;degrees\_of\_freedom=n-1
+&#x20;
+&#x20;chi2\_lower=chi2.ppf(alpha/2, degrees\_of\_freedom)
+&#x20;chi2\_upper=chi2.ppf(1-alpha/2, degrees\_of\_freedom)
+&#x20;lower\_var=(degrees\_of\_freedom\*sample\_variance)/chi2\_upper
+&#x20;upper\_var=(degrees\_of\_freedom\*sample\_variance)/chi2\_lower
+&#x20;import math
+&#x20;lower\_sd=math.sqrt(lower\_var)
+&#x20;upper\_sd=math.sqrt(upper\_var)
+
+### Q.2
+(1)
+p = 0.95
+n = 15
+prob = p\*\*n
+print(prob)
+
+(2)
+sigma = 1.2
+distance = 4
+k = distance / sigma
+# Apply Chebyshev's theorem
+probability = 1 - 1 / (k \*\* 2)
+print("k =", k)
+print("Minimum probability within 4 hours of the mean =", probability)
+
+
+Slip 19
+### Q.1
+(1)
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import t
+import math
+
+# data
+x = \[120,150,135,160,145,130,140,155,150,142,138,148]
+n = len(x)
+
+# mean
+mean = np.mean(x)
+
+# std dev
+s = np.std(x, ddof=1)
+
+# standard error
+SE = s / math.sqrt(n)
+
+# t value
+t\_val = t.ppf(0.975, n-1)
+
+# confidence interval
+lower = mean - t\_val \* SE
+upper = mean + t\_val \* SE
+print("Mean =", mean)
+print("95% CI =", lower, upper)
+
+# plot
+plt.plot(x, 'o-')
+plt.axhline(mean, linestyle='--')
+plt.axhline(lower, linestyle='--')
+plt.axhline(upper, linestyle='--')
+plt.title("Sample Data with Confidence Interval")
+plt.show()
+
+### Q.2
+(1)
+# Step 1: find K
+# equation: 0.1 + K + 0.2 + 2K + 0.3 + K = 1
+K = (1 - (0.1 + 0.2 + 0.3)) / 4
+print("K =", K)
+
+# Step 2: CDF
+F1 = 0.1
+F2 = F1 + K
+F3 = F2 + 0.2
+F4 = F3 + 2\*K
+F5 = F4 + 0.3
+F6 = F5 + K
+print("CDF:", F1, F2, F3, F4, F5, F6)
+
+(2)
+import math
+lam = 3
+p2 = math.exp(-lam) \* lam\*\*2 / math.factorial(2)
+p\_atleast\_1 = 1 - math.exp(-lam)
+print(p2, p\_atleast\_1)
+
+Slip 20
+### Q.1
+(1)
+from scipy.stats import norm
+# Given data
+mu = 70      # mean
+sigma = 8    # standard deviation
+
+# (i) Probability of scoring above 85
+x1 = 85
+z1 = (x1 - mu) / sigma
+P\_above\_85 = 1 - norm.cdf(z1)
+print("P(X > 85) =", P\_above\_85, "or", P\_above\_85\*100, "%")
+
+# (ii) Probability that marks lie between 60 and 75
+x2\_low = 60
+x2\_high = 75
+z2\_low = (x2\_low - mu) / sigma
+z2\_high = (x2\_high - mu) / sigma
+P\_between\_60\_75 = norm.cdf(z2\_high) - norm.cdf(z2\_low)
+print("P(60 < X < 75) =", P\_between\_60\_75, "or", P\_between\_60\_75\*100, "%")
+
+# (iii) Z-scores
+print("Z-score for 60 =", z2\_low)
+print("Z-score for 75 =", z2\_high)
+print("Z-score for 85 =", z1)
+
+### Q.2
+(1)
+import math
+N = 15   # total
+K = 2    # faulty in batch
+n = 5    # sample size
+x = 1    # want 1 faulty
+p1 = math.comb(K, x) \* math.comb(N-K, n-x) / math.comb(N, n)
+p\_both = math.comb(K, 2) \* math.comb(N-K, n-2) / math.comb(N, n)
+print(p)
+print(p\_both)
+
+(2)
+import math
+lam = 3  # per hour
+&#x20;                        
+p2 = math.exp(-lam) \* lam\*\*2 / math.factorial(2)  
+p\_atleast\_1 = 1 - math.exp(-lam)                              
+print("P(X=0) =", p0)
+print("P(X=2) =", p2)
+print("P(X>=1) =", p\_atleast\_1)
+
+Slip 21
+### Q.1
+(1)
+import numpy as np
+import math
+from scipy.stats import chi2
+\# data
+x = \[7.72, 9.58, 12.38, 7.77, 11.27, 8.80, 11.10, 7.80, 10.17, 6.00]
+n = len(x)
+
+\# sample variance
+s2 = np.var(x, ddof=1)
+\# chi-square values (df = n-1 = 9)
+df = n - 1
+alpha = 0.05
+chi2\_lower = chi2.ppf(alpha/2, df)
+chi2\_upper = chi2.ppf(1 - alpha/2, df)
+
+\# confidence interval for variance
+lower = (df \* s2) / chi2\_upper
+upper = (df \* s2) / chi2\_lower
+
+print("Sample Variance =", s2)
+print("95% CI for variance =", lower, upper)
+
+### Q.2
+(1)
+import math
+n = 800
+p = 0.65
+q = 1 - p
+mean = n \* p
+sd = math.sqrt(n \* p \* q)
+print("Mean =", mean)
+print("Standard Deviation =", sd)
+
+(2)
+import math
+N = 15   # total
+K = 2    # faulty in batch
+n = 5    # sample size
+x = 1    # want 1 faulty
+p1 = math.comb(K, x) \* math.comb(N-K, n-x) / math.comb(N, n)
+p\_both = math.comb(K, 2) \* math.comb(N-K, n-2) / math.comb(N, n)
+
+print(p)
+print(p\_both)
+
+Slip 22
+### Q.1
+(1)
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import t
+import math
+# data
+x = \[120,150,135,160,145,130,140,155,150,142,138,148]
+n = len(x)
+
+# mean
+mean = np.mean(x)
+# std dev
+s = np.std(x, ddof=1)
+# standard error
+SE = s / math.sqrt(n)
+# t value
+t\_val = t.ppf(0.975, n-1)
+# confidence interval
+lower = mean - t\_val \* SE
+upper = mean + t\_val \* SE
+print("Mean =", mean)
+print("95% CI =", lower, upper)
+
+# plot
+plt.plot(x, 'o-')
+plt.axhline(mean, linestyle='--')
+plt.axhline(lower, linestyle='--')
+plt.axhline(upper, linestyle='--')
+plt.title("Sample Data with Confidence Interval")
+plt.show()
+
+### Q.2
+(1)
+# Given data
+P\_A = 0.30
+P\_B = 0.50
+P\_C = 0.20
+P\_D\_given\_A = 0.02
+P\_D\_given\_B = 0.03
+P\_D\_given\_C = 0.05
+
+# Total probability of defect
+P\_D = (P\_A \* P\_D\_given\_A) + (P\_B \* P\_D\_given\_B) + (P\_C \* P\_D\_given\_C)
+
+# Probability that defective item came from Machine B (Bayes' theorem)
+P\_B\_given\_D = (P\_B \* P\_D\_given\_B) / P\_D
+print("P(Machine B | Defective) =", P\_B\_given\_D)
+
+(2)
+# Number of tails in 3 fair coin flips: X \~ Binomial(n=3, p=0.5)
+n = 3
+p = 0.5
+mean = n \* p
+var = n \* p \* (1 - p)
+
+print("Mean =", mean)
+print("Variance =", var)
+
+Slip 23
+### Q.1
+(1)
+import numpy as np
+import matplotlib.pyplot as plt
+# given
+a = 5
+b = 15
+
+# theoretical
+mean\_theory = (a + b) / 2
+var\_theory = (b - a)\*\*2 / 12
+print("Theoretical Mean =", mean\_theory)
+print("Theoretical Variance =", var\_theory)
+
+# generate samples
+data = np.random.uniform(a, b, 10000)
+
+# sample mean \& variance
+mean\_sample = np.mean(data)
+var\_sample = np.var(data)
+print("Sample Mean =", mean\_sample)
+print("Sample Variance =", var\_sample)
+
+# plot
+plt.hist(data, bins=50, density=True)
+plt.title("Uniform Distribution U(5,15)")
+plt.show()
+
+### Q.2
+(1)
+import math
+n = 800
+p = 0.65
+q = 1 - p
+mean = n \* p
+sd = math.sqrt(n \* p \* q)
+print("Mean =", mean)
+print("Standard Deviation =", sd)
+
+(2)
+import math
+lam = 3
+p2 = math.exp(-lam) \* lam\*\*2 / math.factorial(2)
+p\_atleast\_1 = 1 - math.exp(-lam)
+print(p2, p\_atleast\_1)
+
+Slip 24
+### Q.1
+(1)
+&#x20;n=12
+&#x20;sample\_variance=0.0013
+&#x20;alpha=0.05
+&#x20;degrees\_of\_freedom=n-1
+&#x20;
+&#x20;chi2\_lower=chi2.ppf(alpha/2, degrees\_of\_freedom)
+&#x20;chi2\_upper=chi2.ppf(1-alpha/2, degrees\_of\_freedom)
+&#x20;lower\_var=(degrees\_of\_freedom\*sample\_variance)/chi2\_upper
+&#x20;upper\_var=(degrees\_of\_freedom\*sample\_variance)/chi2\_lower
+&#x20;import math
+&#x20;lower\_sd=math.sqrt(lower\_var)
+&#x20;upper\_sd=math.sqrt(upper\_var)
+
+### Q.2
+(1)
+# Step 1: find K
+# equation: 0.1 + K + 0.2 + 2K + 0.3 + K = 1
+K = (1 - (0.1 + 0.2 + 0.3)) / 4
+print("K =", K)
+
+# Step 2: CDF
+F1 = 0.1
+F2 = F1 + K
+F3 = F2 + 0.2
+F4 = F3 + 2\*K
+F5 = F4 + 0.3
+F6 = F5 + K
+print("CDF:", F1, F2, F3, F4, F5, F6)
+
+(2)
+# Given values
+p\_disease = 0.02
+p\_no\_disease = 1 - p\_disease
+sensitivity = 0.93      # P(Positive | Disease)
+specificity = 0.94      # P(Negative | No Disease)
+
+# Derived values
+false\_positive = 1 - specificity   # P(Positive | No Disease)
+false\_negative = 1 - sensitivity   # P(Negative | Disease)
+# Probability of a positive test
+p\_positive = (sensitivity \* p\_disease) + (false\_positive \* p\_no\_disease)
+
+# Probability of disease given positive test
+p\_d\_given\_positive = (sensitivity \* p\_disease) / p\_positive
+
+# Probability of a negative test
+p\_negative = (false\_negative \* p\_disease) + (specificity \* p\_no\_disease)
+
+# Probability of no disease given negative test
+p\_notd\_given\_negative = (specificity \* p\_no\_disease) / p\_negative
+
+# Print results
+print("P(Disease | Positive) =", p\_d\_given\_positive)
+print("P(No Disease | Negative) =", p\_notd\_given\_negative)
+
+Slip 25
+### Q.1
+(1)
+from math import sqrt
+from scipy.stats import norm
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Given
+mu = 60       # population mean
+sigma = 18    # population standard deviation
+n = 40        # sample size
+
+\# (i) Standard Error
+SE = sigma / math.sqrt(n)
+print("Standard Error =", SE)
+
+\# (ii) Probability P(X̄ > 48)
+z = (48 - mu) / SE
+prob = 1 - norm.cdf(z)
+print("Probability =", prob)
+
+\# (iii) Simple visualization
+x = np.linspace(mu-4\*se, mu+4\*se, 300)
+plt.plot(x, norm.pdf(x, mu, se))
+plt.axvline(mu, color='k')   # mean
+plt.axvline(48, color='r')   # value
+plt.show()
+
+### Q.2
+(1)
+# X = number of defectives \~ Binomial(n=900, p=0.06)
+n = 900
+p = 0.06
+q = 1 - p
+mean = n \* p
+var = n \* p \* q
+print("Mean =", mean)
+print("Variance =", var)
+
+(2)
+import math
+N = 52
+K = 4
+n = 5
+x = 2
+
+# mean and variance (hypergeometric)
+mean = n \* K / N
+var = n \* (K/N) \* (1 - K/N) \* ((N - n) / (N - 1))
+# probability of exactly 2 aces using combinations
+p\_x\_eq\_2 = math.comb(K, x) \* math.comb(N - K, n - x) / math.comb(N, n)
+print("Mean =", mean)
+print("Variance =", var)
+print("P(X=2) =", p\_x\_eq\_2)
